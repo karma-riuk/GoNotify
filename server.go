@@ -1,20 +1,20 @@
 package main
 
 import (
-	"fmt"
-	"io"
+	"log"
 	"net/http"
 )
 
-func foo() string {
-	return "Hello, World!"
-}
-
 func handler(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, fmt.Sprintf("foo says: %s", foo()))
+	log.Println("Received request", r)
+	Notify(r)
 }
 
 func main() {
+	if !setup() {
+		return
+	}
 	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8080", nil)
+	log.Println("Listening on :8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
